@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AzureFriday.Views.MainView"
+             xmlns:converters="clr-namespace:AzureFriday.Converters;assembly=AzureFriday"
+             xmlns:abstractions="clr-namespace:Xam.FormsPlugin.Abstractions;assembly=AdMobView.FormsPlugin.Abstractions"
+             Title="Azure Friday"
+             BackgroundColor="{StaticResource SecondColor}">
+
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness"
+                              Android="0"
+                              WinPhone="0,0,-13,0"/>
+  </ContentPage.Padding>
+
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:SecondsToMinutesConverter x:Key="SecondsToMinutesConverter"/>
+      <converters:DateTimeToDaysConverters x:Key="DateTimeToDaysConverters"/>
+      <Color x:Key="MainColor">#00abec</Color>
+      <Color x:Key="SecondColor">#a5ce00</Color>
+      <Color x:Key="TextColor">Gray</Color>
+      <Color x:Key="BlackColor">Black</Color>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+
+  <StackLayout Orientation="Vertical">
+
+    <ListView ItemsSource="{Binding Videos}"
+              HasUnevenRows="True"
+              ItemTapped="ListView_OnItemTapped">
+
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <Grid Padding="0,2">
+              <StackLayout Orientation="Vertical"
+                           BackgroundColor="{StaticResource BlackColor}"
+                         >
+                <Grid Padding="12">
+                  <Label Text="{Binding Title}"
+                         TextColor="{StaticResource MainColor}"
+                         Font="Bold"/>
+                </Grid>
+
+                <Image Source="{Binding Thumbnails[2]}">
+                  <Image.WidthRequest>
+                    <OnPlatform x:TypeArguments="x:Double"
+                                Android="360"
+                                WinPhone="480"/>
+                  </Image.WidthRequest>
+                  <Image.HeightRequest>
+                    <OnPlatform x:TypeArguments="x:Double"
+                                Android="225"
+                                WinPhone="271"/>
+                  </Image.HeightRequest>
+                </Image>
+
+                <Grid Padding="12">
+                  <Label Text="{Binding Duration, Converter={StaticResource SecondsToMinutesConverter}}"
+                         TextColor="{StaticResource TextColor}"
+                         Font="Micro"/>
+                  <Label Text="{Binding PublishedAt, StringFormat='{0} days ago', Converter={StaticResource DateTimeToDaysConverters}}"
+                         TextColor="{StaticResource TextColor}"
+                         HorizontalOptions="End"
+                         Font="Micro"/>
+                </Grid>
+
+              </StackLayout>
+            </Grid>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+
+    <abstractions:AdMobView AdUnitId="ca-app-pub-6561596126318213/7487665883"
+                            BackgroundColor="Black"/>
+    
+  </StackLayout>
+
+</ContentPage>
